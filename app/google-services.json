@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "678420135699",
+    "project_id": "buglyapp",
+    "storage_bucket": "buglyapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678420135699:android:71c0b182a26b76745fe4e6",
+        "android_client_info": {
+          "package_name": "com.example.buglyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678420135699-31l2con7rastogsfpotm8lhlkkp3us3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5g6TAYtbYlOFMq8hYXCqZjgZWGXkB5Sg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678420135699-31l2con7rastogsfpotm8lhlkkp3us3i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,5 @@
+0 Bed Bugs Bite 
+1 bee sting
+2 Blister Beetle Bite
+3 Flea Bite
+4 Tick Bite
