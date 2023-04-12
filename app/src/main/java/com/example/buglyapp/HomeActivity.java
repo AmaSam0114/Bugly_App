@@ -36,12 +36,13 @@ public class HomeActivity extends AppCompatActivity {
      private TextView result;
      private Bitmap bitmap;
 
+
+
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
 
 
 
@@ -93,36 +94,44 @@ public class HomeActivity extends AppCompatActivity {
               startActivityForResult(intent,12);
           }
       });
-
         predictBtn.setOnClickListener(new View.OnClickListener(){
-         @Override
-         public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
 
-             try {
-                 Model model = Model.newInstance(HomeActivity.this);
-
-                 // Creates inputs for reference.
-                 TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
-                 bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
-                 inputFeature0.loadBuffer(TensorImage.fromBitmap(bitmap).getBuffer());
+                try {
+                    Model model = Model.newInstance(HomeActivity.this);
 
 
-                 // Runs model inference and gets result.
-                 Model.Outputs outputs = model.process(inputFeature0);
-                 TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
-                 result.setText(getMax(outputFeature0.getFloatArray()) + "");
-
-                 // Releases model resources if no longer used.
-                 model.close();
-             } catch (IOException e) {
-                 // TODO Handle the exception
-             }
+                    // Creates inputs for reference.
+                    TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+                    inputFeature0.loadBuffer(TensorImage.fromBitmap(bitmap).getBuffer());
 
 
-         }
-         });
+                    // Runs model inference and gets result.
+                    Model.Outputs outputs = model.process(inputFeature0);
+                    TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+
+                    TensorImage ti = new TensorImage(DataType.FLOAT32);
+                    ti.load(bitmap);
+
+                    result.setText(getMax(outputFeature0.getFloatArray()) + "");
+
+                    // Releases model resources if no longer used.
+                    model.close();
+                } catch (IOException e) {
+                    // TODO Handle the exception
+                }
+
+
+            }
+        });
+
+
+
+
     }
 
     int getMax(float[] arr){
@@ -138,6 +147,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult( requestCode, resultCode, data);
@@ -146,6 +156,7 @@ public class HomeActivity extends AppCompatActivity {
         {
             imageView.setImageURI(data.getData());
             Uri uri = data.getData();
+
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
             }catch(IOException e){
@@ -160,4 +171,6 @@ public class HomeActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
