@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.buglyapp.ml.ModelUnquant;
+import com.example.buglyapp.ml.Model;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.tensorflow.lite.DataType;
@@ -25,7 +25,6 @@ import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -98,45 +97,42 @@ public class HomeActivity extends AppCompatActivity {
         predictBtn.setOnClickListener(new View.OnClickListener(){
          @Override
          public void onClick(View v) {
-            bitmap = Bitmap.createScaledBitmap(bitmap,128,128,true);
 
 
              try {
-                 ModelUnquant model = ModelUnquant.newInstance(getApplicationContext());
+                 Model model = Model.newInstance(HomeActivity.this);
 
                  // Creates inputs for reference.
                  TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
+                 bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+                 inputFeature0.loadBuffer(TensorImage.fromBitmap(bitmap).getBuffer());
 
-                 TensorImage tensorImage = new TensorImage(DataType.FLOAT32);
-                 tensorImage.load(bitmap);
-                 ByteBuffer byteBuffer = tensorImage.getBuffer();
-
-
-                 inputFeature0.loadBuffer(byteBuffer);
 
                  // Runs model inference and gets result.
-                 ModelUnquant.Outputs outputs = model.process(inputFeature0);
+                 Model.Outputs outputs = model.process(inputFeature0);
                  TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+
+                 result.setText(getMax(outputFeature0.getFloatArray()) + "");
 
                  // Releases model resources if no longer used.
                  model.close();
-
-                 result.setText(outputFeature0.getFloatArray()[0] + "\n" + outputFeature0.getFloatArray()[1] + "\n" + outputFeature0.getFloatArray()[2] + "\n" + outputFeature0.getFloatArray()[3] + "\n" + outputFeature0.getFloatArray()[4]);
-
-
-
-
              } catch (IOException e) {
                  // TODO Handle the exception
              }
 
 
-
          }
          });
-
     }
 
+    int getMax(float[] arr){
+        int max = 0;
+        for (int i=0; i<arr.length; i++){
+            if(arr[i] > arr[max]) max = i;
+
+        }
+        return max;
+    }
 
 
 
