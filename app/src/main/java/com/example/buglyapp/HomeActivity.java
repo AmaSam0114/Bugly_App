@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,24 +18,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.buglyapp.ml.Model;
+import com.example.buglyapp.ml.Model1;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 
 public class HomeActivity extends AppCompatActivity {
 
 
      BottomNavigationView bottomNavigationView;
      private ImageButton imageBtn,captureBtn;
-     private Button predictBtn;
+     private Button predictBtn,infoBtn,locationBtn;
      private ImageView imageView;
      private TextView result;
      private Bitmap bitmap;
+     int imageSize = 224;
 
 
 
@@ -44,7 +49,20 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+          String[] labels = new String[5];
+          int cnt=0;
+        try {
+            BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(getAssets().open("labels.txt")));
+            String line = bufferedReader.readLine();
+            while (line!=null){
+                labels[cnt]=line;
+                cnt++;
+                line = bufferedReader.readLine();
 
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
@@ -76,6 +94,8 @@ public class HomeActivity extends AppCompatActivity {
       imageBtn = (ImageButton) findViewById(R.id.imageBtn);
       captureBtn = (ImageButton) findViewById(R.id.captureBtn);
       predictBtn = (Button) findViewById(R.id.predict);
+      infoBtn = (Button) findViewById(R.id.button_insectInformation);
+        locationBtn = (Button) findViewById(R.id.button_NearestHospital);
 
 
       imageBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,41 +118,60 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 try {
-                    Model model = Model.newInstance(HomeActivity.this);
-
-
+                    Model1 model = Model1.newInstance(getApplicationContext());
 
                     // Creates inputs for reference.
                     TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
-                    inputFeature0.loadBuffer(TensorImage.fromBitmap(bitmap).getBuffer());
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 448, 448, true);
+                  //  inputFeature0.loadBuffer(TensorImage.fromBitmap(bitmap).getBuffer());
 
+                    final ByteBuffer byteBuffer = TensorImage.fromBitmap(bitmap).getBuffer();
+                    //display the bytebuffer in log
+                    Log.e("ByteBuffer",byteBuffer.toString());
+                    Log.e("InputFeatureBuffer", inputFeature0.getBuffer().toString());
+                    inputFeature0.loadBuffer(byteBuffer);
 
                     // Runs model inference and gets result.
-                    Model.Outputs outputs = model.process(inputFeature0);
+                    Model1.Outputs outputs = model.process(inputFeature0);
                     TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
-
                     TensorImage ti = new TensorImage(DataType.FLOAT32);
                     ti.load(bitmap);
-
-                    result.setText(getMax(outputFeature0.getFloatArray()) + "");
-
+                    result.setText(labels[getMax(outputFeature0.getFloatArray())] + "");
                     // Releases model resources if no longer used.
                     model.close();
                 } catch (IOException e) {
                     // TODO Handle the exception
                 }
 
-
             }
         });
 
+      infoBtn.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              // Get the text from the TextView
+              String text = result.getText().toString();
 
+              // Create a new Intent
+              Intent intent = new Intent(HomeActivity.this, Insect_Info.class);
 
+              // Pass the text to the second activity
+              intent.putExtra("text", text);
+
+              startActivity(intent);
+          }
+      });
+        locationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, LocationActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
+
 
     int getMax(float[] arr){
         int max = 0;
@@ -156,6 +195,8 @@ public class HomeActivity extends AppCompatActivity {
         {
             imageView.setImageURI(data.getData());
             Uri uri = data.getData();
+           // bitmap = Bitmap.createScaledBitmap(bitmap,imageSize,imageSize,false);
+
 
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
@@ -166,6 +207,8 @@ public class HomeActivity extends AppCompatActivity {
         else if (requestCode==12) {
             bitmap = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(bitmap);
+
+            //bitmap = Bitmap.createScaledBitmap(bitmap,imageSize,imageSize,false);
 
 
         }
