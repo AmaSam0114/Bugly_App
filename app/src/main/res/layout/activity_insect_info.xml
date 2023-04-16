@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Insect_Info">
+
+    <ImageView
+        android:id="@+id/insect_image"
+        android:layout_width="337dp"
+        android:layout_height="385dp"
+        android:layout_marginTop="112dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/insectName"
+        android:layout_width="146dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="36dp"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/insect_image" />
+
+    <TextView
+        android:id="@+id/insectInfo"
+        android:layout_width="244dp"
+        android:layout_height="190dp"
+        android:textSize="14dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/insectName"
+        app:layout_constraintVertical_bias="0.229" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
