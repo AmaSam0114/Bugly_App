@@ -4,36 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Insect_Info">
-
+    tools:context=".FirstAidActivity">
 
     <TextView
-        android:id="@+id/insectName"
-        android:layout_width="323dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="120dp"
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:text="First Aid"
         android:gravity="center"
         android:padding="10dp"
         android:textColor="@color/black"
-        android:textSize="30dp"
-        android:textStyle="bold"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/insectInfo"
-        android:layout_width="350dp"
-        android:layout_height="254dp"
+        android:id="@+id/first_aid"
+        android:layout_width="339dp"
+        android:layout_height="471dp"
         android:gravity="center"
         android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/insectName"
-        app:layout_constraintVertical_bias="0.173" />
-
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintVertical_bias="0.154" />
 </androidx.constraintlayout.widget.ConstraintLayout>

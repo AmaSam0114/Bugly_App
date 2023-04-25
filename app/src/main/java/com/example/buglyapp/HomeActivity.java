@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
      BottomNavigationView bottomNavigationView;
      private ImageButton imageBtn,captureBtn;
-     private Button predictBtn,infoBtn,locationBtn;
+     private Button predictBtn,infoBtn,locationBtn,symbtn,firstaidbtn;
      private ImageView imageView;
      private TextView result;
      private Bitmap bitmap;
@@ -96,6 +96,8 @@ public class HomeActivity extends AppCompatActivity {
       predictBtn = (Button) findViewById(R.id.predict);
       infoBtn = (Button) findViewById(R.id.button_insectInformation);
         locationBtn = (Button) findViewById(R.id.button_NearestHospital);
+        symbtn = (Button) findViewById(R.id.button_Symptoms);
+        firstaidbtn = (Button) findViewById(R.id.button4_FirstAid);
 
 
       imageBtn.setOnClickListener(new View.OnClickListener() {
@@ -157,8 +159,7 @@ public class HomeActivity extends AppCompatActivity {
               Intent intent = new Intent(HomeActivity.this, Insect_Info.class);
 
               // Pass the text to the second activity
-              intent.putExtra("text", text);
-
+              intent.putExtra("text_value", result.getText().toString());
               startActivity(intent);
           }
       });
@@ -167,6 +168,37 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, LocationActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        symbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the text from the TextView
+                String text = result.getText().toString();
+
+                // Create a new Intent
+                Intent intent1 = new Intent(HomeActivity.this, SymptomsActivity.class);
+
+                // Pass the text to the second activity
+                intent1.putExtra("text", result.getText().toString());
+                startActivity(intent1);
+            }
+        });
+
+
+        firstaidbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+// Get the text from the TextView
+                String text1 = result.getText().toString();
+
+                // Create a new Intent
+                Intent intent2 = new Intent(HomeActivity.this, FirstAidActivity.class);
+
+                // Pass the text to the second activity
+                intent2.putExtra("text1", result.getText().toString());
+                startActivity(intent2);
             }
         });
 
